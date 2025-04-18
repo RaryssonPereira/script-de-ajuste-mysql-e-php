@@ -1,9 +1,9 @@
 ```markdown
-# 🛠️ Ajuste de MySQL e PHP para Cloud Servers
+# ⚙️ Ajuste de MySQL e PHP para Cloud Servers
 
-Este repositório contém um script interativo desenvolvido para **ajustar automaticamente as configurações do MySQL e do PHP-FPM** de acordo com o perfil de recursos do servidor (Cloud 2GB, 4GB, 8GB ou 16GB).
+Este repositório contém um script interativo desenvolvido para ajustar automaticamente as configurações do MySQL e do PHP-FPM de acordo com o perfil de recursos do servidor (Cloud 2GB, 4GB, 8GB ou 16GB).
 
-O objetivo é ajudar **devs, sysadmins e times de suporte técnico** a corrigirem configurações genéricas que causam lentidão, uso excessivo de swap ou consumo desbalanceado de recursos.
+O objetivo é ajudar devs, sysadmins e times de suporte técnico a corrigirem configurações genéricas que causam lentidão, uso excessivo de swap ou consumo desbalanceado de recursos.
 
 ---
 
@@ -95,15 +95,15 @@ Digite a versão do PHP que deseja ajustar: 8.1
 
 ## ❤️ Contribuindo
 
-Este projeto foi feito para **acelerar o suporte técnico e provisionamento de servidores**.  
-Sinta-se à vontade para enviar **Pull Requests com novos perfis, melhorias ou correções**.
+Este projeto foi feito para acelerar o suporte técnico e provisionamento de servidores.  
+Sinta-se à vontade para enviar Pull Requests com novos perfis, melhorias ou correções.
 
 ---
 
 ## 📜 Licença
 
-Este projeto está sob a **licença MIT**.  
-Você pode **usar, modificar e distribuir** como quiser.
+Este projeto está sob a licença MIT.  
+Você pode usar, modificar e distribuir como quiser.
 
 ---
 
