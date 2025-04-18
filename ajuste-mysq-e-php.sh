@@ -63,6 +63,13 @@ ajustar_php() {
 
 # Menu de selecao
 clear
+echo "O que deseja ajustar?"
+echo "1) Somente MySQL"
+echo "2) Somente PHP"
+echo "3) Ambos (MySQL e PHP)"
+read -rp "Digite a opcao (1-3): " acao
+
+clear
 echo "Selecione o tipo de servidor:"
 echo "1) Cloud 2GB"
 echo "2) Cloud 4GB"
@@ -73,19 +80,19 @@ read -rp "Digite a opcao (1-4): " tipo
 case $tipo in
     1)
         mysql_vals=("Cloud 2GB" 100 16M 32M 2M 1M 256 4 512M 1 128M 32M 256)
-        php_vals=(30 5 2 6 300)
+        php_vals=(30 5 2 10 300)
         ;;
     2)
         mysql_vals=("Cloud 4GB" 150 32M 64M 2M 1M 384 6 2G 2 256M 48M 384)
-        php_vals=(40 8 4 10 500)
+        php_vals=(60 10 5 15 500)
         ;;
     3)
         mysql_vals=("Cloud 8GB" 200 64M 128M 4M 2M 512 8 4G 4 512M 64M 512)
-        php_vals=(60 10 5 15 500)
+        php_vals=(100 15 10 20 500)
         ;;
     4)
         mysql_vals=("Cloud 16GB" 300 128M 256M 8M 4M 1024 12 8G 8 1G 128M 1024)
-        php_vals=(80 15 8 20 500)
+        php_vals=(180 20 15 25 500)
         ;;
     *)
         echo "❌ Opcao invalida. Saindo."
@@ -93,21 +100,24 @@ case $tipo in
         ;;
 esac
 
-# Aplicar configuracoes MySQL
-ajustar_mysql "${mysql_vals[@]}"
+# Aplicar configuracoes conforme a escolha
+if [[ "$acao" == "1" || "$acao" == "3" ]]; then
+    ajustar_mysql "${mysql_vals[@]}"
+fi
 
-# Descobrir versoes PHP instaladas
-echo "\nVersoes de PHP detectadas:"
-ls $PHP_BASE_DIR | grep -E '^[0-9]\.[0-9]$'
-echo ""
-read -rp "Digite a versao do PHP que deseja ajustar (ex: 8.1): " php_versao
+if [[ "$acao" == "2" || "$acao" == "3" ]]; then
+    echo "\nVersoes de PHP detectadas:"
+    ls $PHP_BASE_DIR | grep -E '^[0-9]\.[0-9]$'
+    echo ""
+    read -rp "Digite a versao do PHP que deseja ajustar (ex: 8.1): " php_versao
+    ajustar_php "$php_versao" "${php_vals[@]}"
+    echo "\n🔄 Reiniciando PHP-FPM..."
+    systemctl restart php$php_versao-fpm
+fi
 
-# Aplicar configuracoes PHP
-ajustar_php "$php_versao" "${php_vals[@]}"
-
-# Reiniciar servicos
-echo "\n🔄 Reiniciando MySQL e PHP-FPM..."
-systemctl restart mysql
-systemctl restart php$php_versao-fpm
+if [[ "$acao" == "1" || "$acao" == "3" ]]; then
+    echo "\n🔄 Reiniciando MySQL..."
+    systemctl restart mysql
+fi
 
 echo "\n✅ Ajustes aplicados com sucesso para o perfil ${mysql_vals[0]}!"
