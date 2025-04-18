@@ -1,4 +1,3 @@
-```markdown
 # ⚙️ Ajuste de MySQL e PHP para Cloud Servers
 
 Este repositório contém um script interativo desenvolvido para ajustar automaticamente as configurações do MySQL e do PHP-FPM de acordo com o perfil de recursos do servidor (Cloud 2GB, 4GB, 8GB ou 16GB).
@@ -111,4 +110,3 @@ Você pode usar, modificar e distribuir como quiser.
 
 Criado com 💻 por **Rarysson**,  
 para facilitar o dia a dia de quem gerencia servidores de conteúdo, WordPress, APIs e aplicações em nuvem.
-```
