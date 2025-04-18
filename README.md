@@ -40,7 +40,7 @@ O objetivo é ajudar devs, sysadmins e times de suporte técnico a corrigirem co
 ### 1. Baixe o script
 
 ```bash
-git clone https://github.com/RaryssonPereira/ajuste-mysql-php.git
+git clone https://github.com/RaryssonPereira/script-de-ajuste-mysql-e-php.git
 cd ajuste-mysql-php
 ```
 
