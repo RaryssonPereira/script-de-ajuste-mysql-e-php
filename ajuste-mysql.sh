@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Script: ajuste-mysql.sh
+# Script: ajustemysql.sh
 # Descricao: Ajusta automaticamente parametros de performance do MySQL com base na memoria RAM disponivel.
-# Autor: Rarysson (versao aprimorada)
+# Autor: ServerDo.in (versao aprimorada)
 # Data: $(date +"%Y-%m-%d")
 
 CONFIG_FILE="/etc/mysql/conf.d/mysql.cnf"
@@ -31,10 +31,10 @@ adjust_variable() {
     local var_name="$1"
     local new_value="$2"
 
-    # Se ja existe, comenta a linha anterior
+    # Se ja existe, comenta a linha anterior com formato seguro
     if grep -qE "^$var_name" "$CONFIG_FILE"; then
-        old_value=$(grep -E "^$var_name" "$CONFIG_FILE" | cut -d= -f2)
-        sed -i "s/^$var_name.*/# $var_name=$old_value - ajustado pelo script em $DATE/" "$CONFIG_FILE"
+        old_value=$(grep -E "^$var_name" "$CONFIG_FILE" | cut -d= -f2 | xargs)
+        sed -i "s/^$var_name.*/# $var_name (ajustado pelo script em $DATE): antigo valor era $old_value/" "$CONFIG_FILE"
     fi
 
     echo "$var_name=$new_value" >> "$CONFIG_FILE"
@@ -90,7 +90,6 @@ for param in "${PARAMS[@]}"; do
     var_name=$(echo "$param" | cut -d= -f1)
     new_value=$(echo "$param" | cut -d= -f2)
     adjust_variable "$var_name" "$new_value"
-
     sleep 0.1
 done
 
