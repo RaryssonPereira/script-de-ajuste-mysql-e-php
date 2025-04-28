@@ -127,19 +127,22 @@ key_buffer_size=32M
 
 
 # Buffer usado após operações de ordenação
-# Recomendado:
+#
+# PHP + MySQL juntos:
 #   2GB RAM: 32M
 #   4GB RAM: 64M
 #   8GB RAM: 128M
 #   16GB RAM: 256M
+#
+# Apenas MySQL:
+#   2GB RAM: 64M
+#   4GB RAM: 128M
+#   8GB RAM: 256M
+#   16GB RAM: 512M
+#
 read_rnd_buffer_size=64M
 
 # Cache para tabelas abertas
-# Recomendado:
-#   2GB RAM: 256
-#   4GB RAM: 1024
-#   8GB RAM: 2048
-#   16GB RAM: 4096
 table_open_cache=1024
 
 # Ajustes do InnoDB: tamanho do pool de buffer
