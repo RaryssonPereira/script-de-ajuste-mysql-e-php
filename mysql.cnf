@@ -3,8 +3,8 @@
 # Arquivo de estudo: Configurações comentadas para MySQL
 # Perfil: Hospedagem de sites em WordPress, priorizando performance, estabilidade e compatibilidade
 # Compatibilidade: MySQL 5.7 e ajustes para MySQL 8.0 onde relevante
-# Autor: Estudo personalizado
-# Data: 2025-04-24
+# Autor: Rarysson Pereira
+# Data: 2025-04-28
 
 [mysqld]
 
