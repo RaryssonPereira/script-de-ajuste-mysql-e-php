@@ -85,6 +85,12 @@ query_cache_size=256M
 
 # Tamanho máximo de tabelas temporárias na memória
 # Se ultrapassar, gravará no disco (impacto negativo)
+# tmp_table_size
+# max_heap_table_size
+# join_buffer_size
+# sort_buffer_size
+# key_buffer_size
+# read_rnd_buffer_size
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 64M
@@ -100,22 +106,25 @@ query_cache_size=256M
 #
 tmp_table_size=128M
 max_heap_table_size=128M
-
-# Buffers para operações de JOIN (junção de tabelas)
-# Recomendado:
-#   2GB RAM: 64M
-#   4GB RAM: 128M
-#   8GB RAM: 256M
-#   16GB RAM: 512M
 join_buffer_size=128M
-
-# Buffer para operações de ORDER BY (ordenações)
-# Recomendado:
-#   2GB RAM: 64M
-#   4GB RAM: 128M
-#   8GB RAM: 256M
-#   16GB RAM: 512M
 sort_buffer_size=128M
+
+# Buffer para índices MyISAM
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 16M
+#   4GB RAM: 32M
+#   8GB RAM: 64M
+#   16GB RAM: 128M
+#
+# Apenas MySQL:
+#   2GB RAM: 32M
+#   4GB RAM: 64M
+#   8GB RAM: 128M
+#   16GB RAM: 256M
+#
+key_buffer_size=32M
+
 
 # Buffer usado após operações de ordenação
 # Recomendado:
@@ -124,14 +133,6 @@ sort_buffer_size=128M
 #   8GB RAM: 128M
 #   16GB RAM: 256M
 read_rnd_buffer_size=64M
-
-# Buffer para índices MyISAM
-# Recomendado:
-#   2GB RAM: 16M
-#   4GB RAM: 32M
-#   8GB RAM: 64M
-#   16GB RAM: 128M
-key_buffer_size=32M
 
 # Cache para tabelas abertas
 # Recomendado:
