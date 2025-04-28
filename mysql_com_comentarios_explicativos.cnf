@@ -11,12 +11,12 @@
 # Ativa criacao de arquivos separados por tabela no InnoDB
 # (Importante para recuperar tabelas individualmente e ganhar performance)
 # MySQL 5.5+: disponível. Recomendado ativado.
-# Cada tabela InnoDB terá seu próprio arquivo .ibd, melhorando recuperação e eficiência de espaço.
+# Cada tabela InnoDB terá seu próprio arquivo .ibd, melhorando recuperação e eficiência de espaço
 innodb_file_per_table=ON
 
 # Define o tamanho máximo de pacotes de comunicação (uploads de dados grandes, etc)
 # MySQL 5.7 / 8.0: recomendado aumentar para sites WordPress que fazem upload de mídias
-# Define o tamanho máximo de dados que podem ser enviados em uma única operação de comunicação.
+# Define o tamanho máximo de dados que podem ser enviados em uma única operação de comunicação
 max_allowed_packet=256M
 
 # Limita o número máximo de conexões simultâneas no MySQL
@@ -25,22 +25,22 @@ max_allowed_packet=256M
 #   4GB RAM: 100
 #   8GB RAM: 200
 #   16GB RAM: 300
-# Número máximo de conexões simultâneas permitidas no MySQL.
+# Número máximo de conexões simultâneas permitidas no MySQL
 max_connections=100
 
 # Define o tempo que uma conexão inativa é mantida antes de ser fechada
-# Tempo que o servidor aguarda uma conexão inativa antes de fechar.
+# Tempo que o servidor aguarda uma conexão inativa antes de fechar
 wait_timeout=60
-# Similar ao wait_timeout, mas para conexões interativas.
+# Similar ao wait_timeout, mas para conexões interativas
 interactive_timeout=60
 
 # Cache de consultas (Query Cache)
-# OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa.
-# Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura.
+# OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa
+# Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura
 #
-# query_cache_type - Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0.
-# query_cache_limit - # Tamanho máximo de uma única consulta que pode ser armazenada no cache.
-# query_cache_size - Tamanho total alocado para cache de consultas.
+# query_cache_type - Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0
+# query_cache_limit - # Tamanho máximo de uma única consulta que pode ser armazenada no cache
+# query_cache_size - Tamanho total alocado para cache de consultas
 
 # Configuração para Cloud 2GB:
 # PHP + MySQL no mesmo servidor: Query Cache desabilitado
@@ -95,10 +95,10 @@ query_cache_size=256M
 # Tamanho máximo de tabelas temporárias na memória
 # Se ultrapassar, gravará no disco (impacto negativo)
 #
-# tmp_table_size - Tamanho máximo de tabelas temporárias na memória antes de gravar no disco.
-# max_heap_table_size - Tamanho máximo de tabelas HEAP (na memória).
-# join_buffer_size - Buffer usado para operações de junção (JOINs) que não podem usar índices.
-# sort_buffer_size - Buffer usado para operações de ordenação.
+# tmp_table_size - Tamanho máximo de tabelas temporárias na memória antes de gravar no disco
+# max_heap_table_size - Tamanho máximo de tabelas HEAP (na memória)
+# join_buffer_size - Buffer usado para operações de junção (JOINs) que não podem usar índices
+# sort_buffer_size - Buffer usado para operações de ordenação
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 64M
@@ -118,6 +118,7 @@ join_buffer_size=128M
 sort_buffer_size=128M
 
 # Buffer para índices MyISAM
+# key_buffer_size - # Buffer utilizado para índices de tabelas MyISAM (não afeta InnoDB)
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 16M
@@ -131,11 +132,11 @@ sort_buffer_size=128M
 #   8GB RAM: 128M
 #   16GB RAM: 256M
 #
-# Buffer utilizado para índices de tabelas MyISAM (não afeta InnoDB).
 key_buffer_size=32M
 
 
 # Buffer usado após operações de ordenação
+# read_rnd_buffer_size - Buffer usado para leitura aleatória após ordenações
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 32M
@@ -149,15 +150,15 @@ key_buffer_size=32M
 #   8GB RAM: 256M
 #   16GB RAM: 512M
 #
-# Buffer usado para leitura aleatória após ordenações.
 read_rnd_buffer_size=64M
 
 # Cache para tabelas abertas
-# Número de tabelas que podem ficar abertas simultaneamente.
+# Número de tabelas que podem ficar abertas simultaneamente
 table_open_cache=1024
 
 # Ajustes do InnoDB: tamanho do pool de buffer
 # Recomendado ocupar 60%-70% da RAM total
+# innodb_buffer_pool_size - Tamanho da memória destinada ao cache de dados e índices InnoDB
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 512M
@@ -171,10 +172,10 @@ table_open_cache=1024
 #   8GB RAM: 6G
 #   16GB RAM: 12G
 #
-# Tamanho da memória destinada ao cache de dados e índices InnoDB.
 innodb_buffer_pool_size=2G
 
 # Dividir buffer pool em instâncias para paralelismo
+# innodb_buffer_pool_instances - Número de instâncias do Buffer Pool (melhora o paralelismo)
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 1
@@ -188,7 +189,6 @@ innodb_buffer_pool_size=2G
 #   8GB RAM: 3
 #   16GB RAM: 6
 #
-# Número de instâncias do Buffer Pool (melhora o paralelismo).
 innodb_buffer_pool_instances=1
 
 # Otimiza leituras do InnoDB, reduzindo uso de disco
@@ -210,12 +210,13 @@ innodb_support_xa=0
 innodb_checksums=0
 
 # Cache de threads para conexões
-# Recomendado:
+# thread_cache_size - Número de threads mantidas em cache para reutilização em novas conexões
+# 
 #   2GB RAM: 4
 #   4GB RAM: 8
 #   8GB RAM: 16
 #   16GB RAM: 32
-# Número de threads mantidas em cache para reutilização em novas conexões.
+#
 thread_cache_size=8
 
 # Define modo SQL
@@ -224,6 +225,7 @@ sql_mode=""
 
 # Logs para diagnosticar queries lentas
 # (Descomentar se quiser investigar performance)
+#
 #slow_query_log=1
 #slow_query_log_file=/var/log/mysql/slow-queries.log
 #long_query_time=2
