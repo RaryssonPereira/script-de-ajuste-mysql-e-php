@@ -147,17 +147,35 @@ table_open_cache=1024
 
 # Ajustes do InnoDB: tamanho do pool de buffer
 # Recomendado ocupar 60%-70% da RAM total
+#
+# PHP + MySQL juntos:
 #   2GB RAM: 512M
 #   4GB RAM: 2G
 #   8GB RAM: 4G
 #   16GB RAM: 8G
+#
+# Apenas MySQL:
+#   2GB RAM: 1G
+#   4GB RAM: 3G
+#   8GB RAM: 6G
+#   16GB RAM: 12G
+#
 innodb_buffer_pool_size=2G
 
 # Dividir buffer pool em instâncias para paralelismo
+#
+# PHP + MySQL juntos:
 #   2GB RAM: 1
 #   4GB RAM: 1
 #   8GB RAM: 2
 #   16GB RAM: 4
+#
+# Apenas MySQL:
+#   2GB RAM: 1
+#   4GB RAM: 1
+#   8GB RAM: 3
+#   16GB RAM: 6
+#
 innodb_buffer_pool_instances=1
 
 # Otimiza leituras do InnoDB, reduzindo uso de disco
