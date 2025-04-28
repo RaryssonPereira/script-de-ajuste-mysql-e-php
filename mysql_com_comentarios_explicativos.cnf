@@ -38,6 +38,11 @@ interactive_timeout=60
 # OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa.
 # Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura.
 
+# query_cache_type - Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0.
+# query_cache_limit - # Tamanho máximo de uma única consulta que pode ser armazenada no cache.
+# query_cache_size - Tamanho total alocado para cache de consultas.
+
+
 # Configuração para Cloud 2GB:
 # PHP + MySQL no mesmo servidor: Query Cache desabilitado
 # Apenas MySQL: Query Cache ativado
@@ -55,11 +60,8 @@ interactive_timeout=60
 # Configuração para Cloud 4GB:
 #
 # PHP + MySQL juntos:
-# Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0.
 query_cache_type=1
-# Tamanho máximo de uma única consulta que pode ser armazenada no cache.
 query_cache_limit=64M
-# Tamanho total alocado para cache de consultas.
 query_cache_size=256M
 #
 # Apenas MySQL:
