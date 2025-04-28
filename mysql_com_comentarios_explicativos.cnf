@@ -1,0 +1,235 @@
+[mysql]
+
+# Arquivo de estudo: Configurações comentadas para MySQL
+# Perfil: Hospedagem de sites em WordPress, priorizando performance, estabilidade e compatibilidade
+# Compatibilidade: MySQL 5.7 e ajustes para MySQL 8.0 onde relevante
+# Autor: Rarysson Pereira
+# Data: 2025-04-28
+
+[mysqld]
+
+# Ativa criacao de arquivos separados por tabela no InnoDB
+# (Importante para recuperar tabelas individualmente e ganhar performance)
+# MySQL 5.5+: disponível. Recomendado ativado.
+# Cada tabela InnoDB terá seu próprio arquivo .ibd, melhorando recuperação e eficiência de espaço.
+innodb_file_per_table=ON
+
+# Define o tamanho máximo de pacotes de comunicação (uploads de dados grandes, etc)
+# MySQL 5.7 / 8.0: recomendado aumentar para sites WordPress que fazem upload de mídias
+# Define o tamanho máximo de dados que podem ser enviados em uma única operação de comunicação.
+max_allowed_packet=256M
+
+# Limita o número máximo de conexões simultâneas no MySQL
+# Valores recomendados:
+#   2GB RAM: 60
+#   4GB RAM: 100
+#   8GB RAM: 200
+#   16GB RAM: 300
+# Número máximo de conexões simultâneas permitidas no MySQL.
+max_connections=100
+
+# Define o tempo que uma conexão inativa é mantida antes de ser fechada
+# Tempo que o servidor aguarda uma conexão inativa antes de fechar.
+wait_timeout=60
+# Similar ao wait_timeout, mas para conexões interativas.
+interactive_timeout=60
+
+# Cache de consultas (Query Cache)
+# OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa.
+# Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura.
+
+# Configuração para Cloud 2GB:
+# PHP + MySQL no mesmo servidor: Query Cache desabilitado
+# Apenas MySQL: Query Cache ativado
+#
+# PHP + MySQL juntos:
+#query_cache_type=0
+#query_cache_limit=0M
+#query_cache_size=0M
+#
+# Apenas MySQL:
+#query_cache_type=1
+#query_cache_limit=64M
+#query_cache_size=256M
+
+# Configuração para Cloud 4GB:
+#
+# PHP + MySQL juntos:
+# Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0.
+query_cache_type=1
+# Tamanho máximo de uma única consulta que pode ser armazenada no cache.
+query_cache_limit=64M
+# Tamanho total alocado para cache de consultas.
+query_cache_size=256M
+#
+# Apenas MySQL:
+#query_cache_type=1
+#query_cache_limit=128M
+#query_cache_size=512M
+
+# Configuração para Cloud 8GB:
+#
+# PHP + MySQL juntos:
+#query_cache_type=1
+#query_cache_limit=128M
+#query_cache_size=512M
+#
+# Apenas MySQL:
+#query_cache_type=1
+#query_cache_limit=256M
+#query_cache_size=1024M
+
+# Configuração para Cloud 16GB:
+#
+# PHP + MySQL juntos:
+#query_cache_type=1
+#query_cache_limit=256M
+#query_cache_size=1024M
+#
+# Apenas MySQL:
+#query_cache_type=1
+#query_cache_limit=512M
+#query_cache_size=2048M
+
+# Tamanho máximo de tabelas temporárias na memória
+# Se ultrapassar, gravará no disco (impacto negativo)
+# tmp_table_size
+# max_heap_table_size
+# join_buffer_size
+# sort_buffer_size
+# key_buffer_size
+# read_rnd_buffer_size
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 64M
+#   4GB RAM: 128M
+#   8GB RAM: 256M
+#   16GB RAM: 512M
+#
+# Apenas MySQL:
+#   2GB RAM: 128M
+#   4GB RAM: 256M
+#   8GB RAM: 512M
+#   16GB RAM: 1024M
+#
+# Tamanho máximo de tabelas temporárias na memória antes de gravar no disco.
+tmp_table_size=128M
+# Tamanho máximo de tabelas HEAP (na memória).
+max_heap_table_size=128M
+# Buffer usado para operações de junção (JOINs) que não podem usar índices.
+join_buffer_size=128M
+# Buffer usado para operações de ordenação.
+sort_buffer_size=128M
+
+# Buffer para índices MyISAM
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 16M
+#   4GB RAM: 32M
+#   8GB RAM: 64M
+#   16GB RAM: 128M
+#
+# Apenas MySQL:
+#   2GB RAM: 32M
+#   4GB RAM: 64M
+#   8GB RAM: 128M
+#   16GB RAM: 256M
+#
+# Buffer utilizado para índices de tabelas MyISAM (não afeta InnoDB).
+key_buffer_size=32M
+
+
+# Buffer usado após operações de ordenação
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 32M
+#   4GB RAM: 64M
+#   8GB RAM: 128M
+#   16GB RAM: 256M
+#
+# Apenas MySQL:
+#   2GB RAM: 64M
+#   4GB RAM: 128M
+#   8GB RAM: 256M
+#   16GB RAM: 512M
+#
+# Buffer usado para leitura aleatória após ordenações.
+read_rnd_buffer_size=64M
+
+# Cache para tabelas abertas
+# Número de tabelas que podem ficar abertas simultaneamente.
+table_open_cache=1024
+
+# Ajustes do InnoDB: tamanho do pool de buffer
+# Recomendado ocupar 60%-70% da RAM total
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 512M
+#   4GB RAM: 2G
+#   8GB RAM: 4G
+#   16GB RAM: 8G
+#
+# Apenas MySQL:
+#   2GB RAM: 1G
+#   4GB RAM: 3G
+#   8GB RAM: 6G
+#   16GB RAM: 12G
+#
+# Tamanho da memória destinada ao cache de dados e índices InnoDB.
+innodb_buffer_pool_size=2G
+
+# Dividir buffer pool em instâncias para paralelismo
+#
+# PHP + MySQL juntos:
+#   2GB RAM: 1
+#   4GB RAM: 1
+#   8GB RAM: 2
+#   16GB RAM: 4
+#
+# Apenas MySQL:
+#   2GB RAM: 1
+#   4GB RAM: 1
+#   8GB RAM: 3
+#   16GB RAM: 6
+#
+# Número de instâncias do Buffer Pool (melhora o paralelismo).
+innodb_buffer_pool_instances=1
+
+# Otimiza leituras do InnoDB, reduzindo uso de disco
+# Quantidade de páginas verificadas por vez pelo InnoDB para limpeza de cache.
+innodb_lru_scan_depth=256
+
+# Força escrita direta em disco
+# Método de flush dos dados no disco, O_DIRECT evita cache duplo entre OS e MySQL.
+innodb_flush_method=O_DIRECT
+
+# Desabilita escrita dupla do InnoDB
+# Protege contra corrupção de dados durante falhas de energia. Desativar acelera, mas aumenta risco.
+innodb_doublewrite=0
+
+# Configurações de consistência de transações
+# Define suporte a transações XA distribuídas. Desativar melhora desempenho se não utilizado.
+innodb_support_xa=0
+# Verificação de integridade dos dados InnoDB. Desativar melhora desempenho mas aumenta risco.
+innodb_checksums=0
+
+# Cache de threads para conexões
+# Recomendado:
+#   2GB RAM: 4
+#   4GB RAM: 8
+#   8GB RAM: 16
+#   16GB RAM: 32
+# Número de threads mantidas em cache para reutilização em novas conexões.
+thread_cache_size=8
+
+# Define modo SQL
+# Define regras SQL como restrições de integridade e sintaxe.
+sql_mode=""
+
+# Logs para diagnosticar queries lentas
+# (Descomentar se quiser investigar performance)
+#slow_query_log=1
+#slow_query_log_file=/var/log/mysql/slow-queries.log
+#long_query_time=2
+
+# Fim das configurações personalizadas
