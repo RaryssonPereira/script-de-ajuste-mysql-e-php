@@ -85,11 +85,19 @@ query_cache_size=256M
 
 # Tamanho máximo de tabelas temporárias na memória
 # Se ultrapassar, gravará no disco (impacto negativo)
-# Recomendado:
+#
+# PHP + MySQL juntos:
 #   2GB RAM: 64M
 #   4GB RAM: 128M
 #   8GB RAM: 256M
 #   16GB RAM: 512M
+#
+# Apenas MySQL:
+#   2GB RAM: 128M
+#   4GB RAM: 256M
+#   8GB RAM: 512M
+#   16GB RAM: 1024M
+#
 tmp_table_size=128M
 max_heap_table_size=128M
 
