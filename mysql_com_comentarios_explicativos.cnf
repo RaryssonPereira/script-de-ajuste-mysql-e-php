@@ -37,11 +37,10 @@ interactive_timeout=60
 # Cache de consultas (Query Cache)
 # OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa.
 # Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura.
-
+#
 # query_cache_type - Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0.
 # query_cache_limit - # Tamanho máximo de uma única consulta que pode ser armazenada no cache.
 # query_cache_size - Tamanho total alocado para cache de consultas.
-
 
 # Configuração para Cloud 2GB:
 # PHP + MySQL no mesmo servidor: Query Cache desabilitado
@@ -95,12 +94,11 @@ query_cache_size=256M
 
 # Tamanho máximo de tabelas temporárias na memória
 # Se ultrapassar, gravará no disco (impacto negativo)
-# tmp_table_size
-# max_heap_table_size
-# join_buffer_size
-# sort_buffer_size
-# key_buffer_size
-# read_rnd_buffer_size
+#
+# tmp_table_size - Tamanho máximo de tabelas temporárias na memória antes de gravar no disco.
+# max_heap_table_size - Tamanho máximo de tabelas HEAP (na memória).
+# join_buffer_size - Buffer usado para operações de junção (JOINs) que não podem usar índices.
+# sort_buffer_size - Buffer usado para operações de ordenação.
 #
 # PHP + MySQL juntos:
 #   2GB RAM: 64M
@@ -114,13 +112,9 @@ query_cache_size=256M
 #   8GB RAM: 512M
 #   16GB RAM: 1024M
 #
-# Tamanho máximo de tabelas temporárias na memória antes de gravar no disco.
 tmp_table_size=128M
-# Tamanho máximo de tabelas HEAP (na memória).
 max_heap_table_size=128M
-# Buffer usado para operações de junção (JOINs) que não podem usar índices.
 join_buffer_size=128M
-# Buffer usado para operações de ordenação.
 sort_buffer_size=128M
 
 # Buffer para índices MyISAM
