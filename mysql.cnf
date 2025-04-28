@@ -49,7 +49,7 @@ interactive_timeout=60
 
 # Configuração para Cloud 4GB:
 #
-# - PHP + MySQL juntos:
+# PHP + MySQL juntos:
 query_cache_type=1
 query_cache_limit=64M
 query_cache_size=256M
@@ -61,7 +61,7 @@ query_cache_size=256M
 
 # Configuração para Cloud 8GB:
 #
-# - PHP + MySQL juntos:
+# PHP + MySQL juntos:
 #query_cache_type=1
 #query_cache_limit=128M
 #query_cache_size=512M
@@ -73,7 +73,7 @@ query_cache_size=256M
 
 # Configuração para Cloud 16GB:
 #
-# - PHP + MySQL juntos:
+# PHP + MySQL juntos:
 #query_cache_type=1
 #query_cache_limit=256M
 #query_cache_size=1024M
