@@ -1,0 +1,167 @@
+[mysql]
+
+# Configuração MySQL otimizada para WordPress em hospedagem Cloud
+# Compatível com MySQL 5.7 e ajustes válidos também para MySQL 8.0
+# Autor: Rarysson Pereira
+# Data: 2025-04-28
+
+[mysqld]
+
+# Diretiva abaixo que faz que sejam criados um arquivo de dados do innodb para cada tabela, importante para a questão de segurança no caso de ser necessária uma recuperação dos dados
+innodb_file_per_table=ON
+# Diretiva abaixo define o tamanho máximo de um resultset
+max_allowed_packet=256M
+# Quantidade máxima de conexões que o mysql irá aceitar
+max_connections=300
+# As duas diretivas abaixo indicam o tempo máximo que o mysql irá aguardar antes de tentar interromper a conexão, lembrando que temos o pt-kill que verifica e mata conexões com mais de 40 segundos que não são executadas pelo root
+wait_timeout=60
+interactive_timeout=60
+
+# Diretivas abaixo ativam o cache, ou seja, se chega uma consulta igual a uma anterior e a tabela não foi modificada(insert,update e delete), ele tenta entregar o cache da consulta.
+# Por isso que consultas que não tenham campo de segundos, ou que usem tabelas pouco modificadas podem aproveitar esse recurso. Funciona no MySQL até 5.7, no MySQL 8 estamos estudando ProxySQL e afins como cache no Redis
+# Se MySQL 8 todo o bloco abaixo deve ser comentado
+# query_cache_limit é o tamanho que uma consulta pode salvar um resultset, uma tabela de resultado. É muito raro já tem uma co nsulta que retorne mais de 64M, por isso esses valores estão bem superestimados
+# query_cache_size é o tamanho máximo em memória que todos os caches podem usar
+query_cache_type=1
+# Configuração abaixo recomendada Cloud 2GB PHP e MySQL Juntos - Query cache desabilitado nesse caso
+#query_cache_type=0
+#query_cache_limit=0M
+#query_cache_size=0M
+# Configuração abaixo recomendada Cloud 4GB PHP e MySQL Juntos
+query_cache_limit=64M
+query_cache_size=256M
+# Configuração abaixo recomendada Cloud 8GB PHP e MySQL Juntos
+#query_cache_limit=128M
+#query_cache_size=512M
+# Configuração abaixo recomendada Cloud 16GB PHP e MySQL Juntos
+#query_cache_limit=256M
+#query_cache_size=1024M
+# Configuração abaixo recomendada Cloud 2GB apenas MySQL
+#query_cache_limit=64M
+#query_cache_size=256M
+# Configuração abaixo recomendada Cloud 4GB apenas MySQL
+#query_cache_limit=128M
+#query_cache_size=512M
+# Configuração abaixo recomendada Cloud 8GB apenas MySQL
+#query_cache_limit=256M
+#query_cache_size=1024M
+# Configuração abaixo recomendada Cloud 16GB apenas MySQL
+#query_cache_limit=512M
+#query_cache_size=2048M
+
+# Bloco de ajustes de acordo com cada estrutura de banco e memória disponível. As configurações do bloco abaixo são as que mais podem sofrer influência pela forma do banco de dados e natureza de dados.
+# Pode ir ajustando e aumentando desde que 24 horas depois do restart não esteja com risco de swap. Importante avaliar se carga média do banco cai e consultas ficam mais rápida, para não usar memória sem ganho de performance.
+# tmp_table_size - Diretiva define o tamanho máximo de tabelas temporárias em memória quando o SQL faz uma subconsulta de uma tabela dentro da outra.
+# max_heap_table_size - Tamanho máximo de uma tabela do tipo de memória
+# join_buffer_size - Diretiva define o quanto de memória uma consulta pode usar para um join, uma união de duas ou mais tabelas. Caso passe desse valor, o mysql vai criar uma tabela em disco que é bem mais lento que a memória ram
+# sort_buffer_size - Diretiva define o quanto de memória uma consulta pode usar para um sort, uma ordenação de uma consulta. Caso passe desse valor, o mysql vai criar uma tabela em disco que é bem mais lento que a memória ram
+# key_buffer_size - Diretiva é só para bases myisam que quase não usamos e define um limite de memória ram para salvar a tabela de índices - Já usamos um valor alto, pode aumentar caso acredite que é necessário
+# read_rnd_buffer_size - Diretiva que define a leitura após a ordenação
+# Configuração abaixo recomendada Cloud 2GB PHP e MySQL Juntos
+#tmp_table_size=64M
+#max_heap_table_size=64M
+#join_buffer_size = 64M
+#sort_buffer_size = 64M
+#key_buffer_size=16M
+#read_rnd_buffer_size = 32M
+# Configuração abaixo recomendada Cloud 4GB PHP e MySQL Juntos
+tmp_table_size=128M
+max_heap_table_size=128M
+join_buffer_size = 128M
+sort_buffer_size = 128M
+key_buffer_size=32M
+read_rnd_buffer_size = 64M
+# Configuração abaixo recomendada Cloud 8GB PHP e MySQL Juntos
+#tmp_table_size=256M
+#max_heap_table_size=256M
+#join_buffer_size = 256M
+#sort_buffer_size = 256M
+#key_buffer_size=64M
+#read_rnd_buffer_size = 128M
+# Configuração abaixo recomendada Cloud 16GB PHP e MySQL Juntos
+#tmp_table_size=512M
+#max_heap_table_size=512M
+#join_buffer_size = 512M
+#sort_buffer_size = 512M
+#key_buffer_size=128M
+#read_rnd_buffer_size = 256M
+# Configuração abaixo recomendada Cloud 2GB apenas MySQL
+#tmp_table_size=128M
+#max_heap_table_size=128M
+#join_buffer_size = 128M
+#sort_buffer_size = 128M
+#key_buffer_size=32M
+#read_rnd_buffer_size = 64M
+# Configuração abaixo recomendada Cloud 4GB apenas MySQL
+#tmp_table_size=256M
+#max_heap_table_size=256M
+#join_buffer_size = 256M
+#sort_buffer_size = 256M
+#key_buffer_size=64M
+#read_rnd_buffer_size = 128M
+# Configuração abaixo recomendada Cloud 8GB apenas MySQL
+#tmp_table_size=512M
+#max_heap_table_size=512M
+#join_buffer_size = 512M
+#sort_buffer_size = 512M
+#key_buffer_size=128M
+#read_rnd_buffer_size = 256M
+# Configuração abaixo recomendada Cloud 16GB apenas MySQL
+#tmp_table_size=1024M
+#max_heap_table_size=1024M
+#join_buffer_size = 1024M
+#sort_buffer_size = 1024M
+#key_buffer_size=256M
+#read_rnd_buffer_size = 512M
+
+# Diretiva que define quantas tabelas ficam abertas para consultas em paralelo. Se o banco for muito grande, com muitas tabelas podemos aumentar.
+table_open_cache=1024
+
+# A diretiva innodb_buffer_pool_instances é a quantidade de instâncias que podem acessar um banco innodb que é o tipo principal de banco que usamos hoje em dia multiplicado pelo limite máximo de memória que é innodb_buffer_pool_size
+# Essa configuração base de innodb_buffer_pool_size=2G e innodb_buffer_pool_instances=1 é para um Cloud 4GB com 4 processadores onde apenas 2GB ficam para o Mysql e o restante para o PHP. Caso seja um servidor exclusivo de banco ou banco com elasticsearch junto, é indicado que a quantidade de instâncias suba para termos paralelismo sempre deixando innodb_buffer_pool_size entre 1G e 2G e a quantidade de instâncias aumentando para que se o servidor for exclusivo Mysql para que a memória fique em até 80%
+# Caso o banco seja muito pequeno, não adianta ter um innodb_buffer_pool_size de 10GB e todos os bancos mais todos os índices +60% extra não forem superiores a isso. Ou seja, não vai usar tudo o que aumentarmos no innodb_buffer_pool_size porque o banco é pequeno.
+# Boa referência: https://dba.stackexchange.com/questions/27328/how-large-should-be-mysql-innodb-buffer-pool-size
+# Configuração abaixo recomendada Cloud 2GB PHP e MySQL Juntos
+#innodb_buffer_pool_size=1G
+#innodb_buffer_pool_instances=1
+# Configuração abaixo recomendada Cloud 4GB PHP e MySQL Juntos
+innodb_buffer_pool_size=2G
+innodb_buffer_pool_instances=1
+# Configuração abaixo recomendada Cloud 8GB PHP e MySQL Juntos
+#innodb_buffer_pool_size=4G
+#innodb_buffer_pool_instances=2
+# Configuração abaixo recomendada Cloud 16GB PHP e MySQL Juntos
+#innodb_buffer_pool_size=8G
+#innodb_buffer_pool_instances=4
+# Configuração abaixo recomendada Cloud 2GB apenas MySQL
+#innodb_buffer_pool_size=2G
+#innodb_buffer_pool_instances=1
+# Configuração abaixo recomendada Cloud 4GB apenas MySQL
+#innodb_buffer_pool_size=3G
+#innodb_buffer_pool_instances=1
+# Configuração abaixo recomendada Cloud 8GB apenas MySQL
+#innodb_buffer_pool_size=6G
+#innodb_buffer_pool_instances=3
+# Configuração abaixo recomendada Cloud 16GB apenas MySQL
+#innodb_buffer_pool_size=12G
+#innodb_buffer_pool_instances=6
+
+# Cache para as threads e conexões paralelas. Ver quantas conexões em paralelo normalmente ficam no mytop ou show full processlist pode ser uma boa, se deixar valor muito alto desperdiça memória ram
+# Referências: https://serverfault.com/questions/408845/what-value-of-thread-cache-size-should-i-use
+# Referências: https://releem.com/docs/mysql-performance-tuning/thread_cache_size
+thread_cache_size = 4
+
+# Tipo de SQL
+sql_mode=""
+
+# Ajustes para o uso de bancos innodb que é o mais usamos terem menor uso de IO, evitando gargalos
+innodb_lru_scan_depth=256
+innodb_flush_method = O_DIRECT
+innodb_doublewrite = 0
+innodb_support_xa = 0
+innodb_checksums = 0
+
+## Slow log do MySQL. Usado para investigação. Deixar comentado por padrão.
+#slow_query_log = 1
+#slow_query_log_file = /var/log/mysql/slow-queries.log
+#long_query_time = 30

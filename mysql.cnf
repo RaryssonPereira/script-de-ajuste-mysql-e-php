@@ -1,233 +1,224 @@
 [mysql]
 
-# Arquivo de estudo: Configurações comentadas para MySQL
-# Perfil: Hospedagem de sites em WordPress, priorizando performance, estabilidade e compatibilidade
-# Compatibilidade: MySQL 5.7 e ajustes para MySQL 8.0 onde relevante
+# Configuração MySQL otimizada para WordPress em hospedagem Cloud
+# Compatível com MySQL 5.7 e ajustes válidos também para MySQL 8.0
 # Autor: Rarysson Pereira
-# Data: 2025-04-28
+# Data: 2025-05-21
 
 [mysqld]
 
-# Ativa criacao de arquivos separados por tabela no InnoDB
-# (Importante para recuperar tabelas individualmente e ganhar performance)
-# MySQL 5.5+: disponível. Recomendado ativado.
-# Cada tabela InnoDB terá seu próprio arquivo .ibd, melhorando recuperação e eficiência de espaço
-innodb_file_per_table=ON
+# Armazena cada tabela InnoDB em um arquivo separado (melhora backups e uso de disco)
+innodb_file_per_table = ON
 
-# Define o tamanho máximo de pacotes de comunicação (uploads de dados grandes, etc)
-# MySQL 5.7 / 8.0: recomendado aumentar para sites WordPress que fazem upload de mídias
-# Define o tamanho máximo de dados que podem ser enviados em uma única operação de comunicação
-max_allowed_packet=256M
+# Permite envio de pacotes maiores (evita erro em uploads grandes no WordPress)
+max_allowed_packet = 256M
 
-# Limita o número máximo de conexões simultâneas no MySQL
-# Valores recomendados:
-#   2GB RAM: 60
-#   4GB RAM: 100
-#   8GB RAM: 200
-#   16GB RAM: 300
-# Número máximo de conexões simultâneas permitidas no MySQL
-max_connections=100
+# Limita o número máximo de conexões simultâneas (ajustado por plano)
+# 2GB: 100 | 4GB: 150 | 8GB: 200 | 16GB: 300
+max_connections = 150
 
-# Define o tempo que uma conexão inativa é mantida antes de ser fechada
-# Tempo que o servidor aguarda uma conexão inativa antes de fechar
-wait_timeout=60
-# Similar ao wait_timeout, mas para conexões interativas
-interactive_timeout=60
+# Tempo limite (em segundos) para conexões inativas vindas da aplicação (ex: WordPress)
+# Após esse tempo, a conexão é encerrada para liberar recursos
+wait_timeout = 60
 
-# Cache de consultas (Query Cache)
-# OBS: Depreciado no MySQL 8.0 - usar ProxySQL ou Redis como alternativa
-# Em MySQL 5.7, pode beneficiar sites WordPress focados em leitura
-#
-# query_cache_type - Define se o cache de consultas está ativado (1) ou desativado (0). Depreciado no MySQL 8.0
-# query_cache_limit - # Tamanho máximo de uma única consulta que pode ser armazenada no cache
-# query_cache_size - Tamanho total alocado para cache de consultas
+# Tempo limite para conexões interativas, como sessões em linha de comando (mysql CLI)
+# Pode ser mantido igual ao wait_timeout em servidores de produção
+interactive_timeout = 60
 
-# Configuração para Cloud 2GB:
-# PHP + MySQL no mesmo servidor: Query Cache desabilitado
-# Apenas MySQL: Query Cache ativado
-#
+# Cache de Consultas (Query Cache)
+# OBS: Depreciado no MySQL 8.0 – usar Redis ou ProxySQL como alternativa
+# Beneficia MySQL 5.7 em sites WordPress com alto volume de leitura
+
+# Parâmetros:
+# query_cache_type  → Ativa (1) ou desativa (0) o cache de consultas
+# query_cache_limit → Tamanho máximo de uma consulta armazenável no cache
+# query_cache_size  → Tamanho total alocado para o cache de consultas
+
+# Cloud 2GB:
 # PHP + MySQL juntos:
-#query_cache_type=0
-#query_cache_limit=0M
-#query_cache_size=0M
-#
+#query_cache_type  = 0
+#query_cache_limit = 0M
+#query_cache_size  = 0M
 # Apenas MySQL:
-#query_cache_type=1
-#query_cache_limit=64M
-#query_cache_size=256M
+#query_cache_type  = 1
+#query_cache_limit = 64M
+#query_cache_size  = 256M
 
-# Configuração para Cloud 4GB:
-#
+# Cloud 4GB:
 # PHP + MySQL juntos:
-query_cache_type=1
-query_cache_limit=64M
-query_cache_size=256M
-#
+query_cache_type  = 1
+query_cache_limit = 64M
+query_cache_size  = 256M
 # Apenas MySQL:
-#query_cache_type=1
-#query_cache_limit=128M
-#query_cache_size=512M
+#query_cache_type  = 1
+#query_cache_limit = 128M
+#query_cache_size  = 512M
 
-# Configuração para Cloud 8GB:
-#
+# Cloud 8GB:
 # PHP + MySQL juntos:
-#query_cache_type=1
-#query_cache_limit=128M
-#query_cache_size=512M
-#
+#query_cache_type  = 1
+#query_cache_limit = 128M
+#query_cache_size  = 512M
 # Apenas MySQL:
-#query_cache_type=1
-#query_cache_limit=256M
-#query_cache_size=1024M
+#query_cache_type  = 1
+#query_cache_limit = 256M
+#query_cache_size  = 1024M
 
-# Configuração para Cloud 16GB:
-#
+# Cloud 16GB:
 # PHP + MySQL juntos:
-#query_cache_type=1
-#query_cache_limit=256M
-#query_cache_size=1024M
-#
+#query_cache_type  = 1
+#query_cache_limit = 256M
+#query_cache_size  = 1024M
 # Apenas MySQL:
-#query_cache_type=1
-#query_cache_limit=512M
-#query_cache_size=2048M
+#query_cache_type  = 1
+#query_cache_limit = 512M
+#query_cache_size  = 2048M
 
-# Tamanho máximo de tabelas temporárias na memória
-# Se ultrapassar, gravará no disco (impacto negativo)
-#
-# tmp_table_size - Tamanho máximo de tabelas temporárias na memória antes de gravar no disco
-# max_heap_table_size - Tamanho máximo de tabelas HEAP (na memória)
-# join_buffer_size - Buffer usado para operações de junção (JOINs) que não podem usar índices
-# sort_buffer_size - Buffer usado para operações de ordenação
-#
-# PHP + MySQL juntos:
-#   2GB RAM: 64M
-#   4GB RAM: 128M
-#   8GB RAM: 256M
-#   16GB RAM: 512M
-#
+# Buffers e tabelas temporárias na memória
+# Esses parâmetros ajudam a evitar gravações em disco durante operações como JOINs e ORDER BY,
+# melhorando a performance em sites WordPress e aplicações com consultas complexas.
+
+# Tamanho máximo de uma tabela temporária criada automaticamente em memória (após isso, vai para o disco)
+tmp_table_size = 128M
+
+# Limite de memória para tabelas HEAP (tipo especial de tabela em memória, usada internamente pelo MySQL)
+max_heap_table_size = 128M
+
+# Memória alocada por conexão para armazenar dados durante operações de JOIN sem índice
+join_buffer_size = 128M
+
+# Memória usada por conexão para operações de ordenação (ex: ORDER BY)
+sort_buffer_size = 128M
+
+# Perfis recomendados:
+# PHP + MySQL:
+#   2GB:  64M
+#   4GB: 128M  ← em uso
+#   8GB: 256M
+#   16GB: 512M
 # Apenas MySQL:
-#   2GB RAM: 128M
-#   4GB RAM: 256M
-#   8GB RAM: 512M
-#   16GB RAM: 1024M
-#
-tmp_table_size=128M
-max_heap_table_size=128M
-join_buffer_size=128M
-sort_buffer_size=128M
+#   2GB:  128M
+#   4GB:  256M
+#   8GB:  512M
+#   16GB: 1024M
 
-# Buffer para índices MyISAM
-# key_buffer_size - # Buffer utilizado para índices de tabelas MyISAM (não afeta InnoDB)
-#
-# PHP + MySQL juntos:
-#   2GB RAM: 16M
-#   4GB RAM: 32M
-#   8GB RAM: 64M
-#   16GB RAM: 128M
-#
+# Buffer para índices de tabelas MyISAM (não afeta InnoDB)
+# Mesmo que o InnoDB seja o padrão atual, esse parâmetro é mantido por compatibilidade com sistemas legados,
+# ou plugins WordPress que ainda usam tabelas MyISAM (ex: estatísticas, logs, caches antigos).
+
+# Parâmetro ativo: otimizado para Cloud 4GB – PHP + MySQL
+key_buffer_size = 32M
+
+# Perfis recomendados:
+# PHP + MySQL:
+#   2GB:  16M
+#   4GB:  32M  ← em uso
+#   8GB:  64M
+#   16GB: 128M
 # Apenas MySQL:
-#   2GB RAM: 32M
-#   4GB RAM: 64M
-#   8GB RAM: 128M
-#   16GB RAM: 256M
-#
-key_buffer_size=32M
+#   2GB:  32M
+#   4GB:  64M
+#   8GB:  128M
+#   16GB: 256M
 
+# Buffer usado para leitura aleatória de dados após operações de ordenação (ex: ORDER BY sem índice)
+# Otimiza a leitura sequencial em tabelas grandes após ordenações.
+read_rnd_buffer_size = 64M
 
-# Buffer usado após operações de ordenação
-# read_rnd_buffer_size - Buffer usado para leitura aleatória após ordenações
-#
-# PHP + MySQL juntos:
-#   2GB RAM: 32M
-#   4GB RAM: 64M
-#   8GB RAM: 128M
-#   16GB RAM: 256M
-#
+# Perfis recomendados:
+# PHP + MySQL:
+#   2GB:  32M
+#   4GB:  64M  ← em uso
+#   8GB:  128M
+#   16GB: 256M
 # Apenas MySQL:
-#   2GB RAM: 64M
-#   4GB RAM: 128M
-#   8GB RAM: 256M
-#   16GB RAM: 512M
-#
-read_rnd_buffer_size=64M
+#   2GB:  64M
+#   4GB:  128M
+#   8GB:  256M
+#   16GB: 512M
 
-# Cache para tabelas abertas
-# Número de tabelas que podem ficar abertas simultaneamente
-table_open_cache=1024
+# Quantidade máxima de tabelas que o MySQL pode manter abertas ao mesmo tempo
+# Evita overhead com reabertura constante em sites WordPress com muitos plugins e tabelas
+table_open_cache = 1024
 
-# Ajustes do InnoDB: tamanho do pool de buffer
-# Recomendado ocupar 60%-70% da RAM total
-# innodb_buffer_pool_size - Tamanho da memória destinada ao cache de dados e índices InnoDB
-#
-# PHP + MySQL juntos:
-#   2GB RAM: 512M
-#   4GB RAM: 2G
-#   8GB RAM: 4G
-#   16GB RAM: 8G
-#
+# Buffer principal do InnoDB – armazena dados e índices em memória
+# Recomendado usar entre 60% e 70% da RAM total disponível
+innodb_buffer_pool_size = 2G
+
+# Perfis recomendados:
+# PHP + MySQL:
+#   2GB:  512M
+#   4GB:  2G   ← em uso
+#   8GB:  4G
+#   16GB: 8G
 # Apenas MySQL:
-#   2GB RAM: 1G
-#   4GB RAM: 3G
-#   8GB RAM: 6G
-#   16GB RAM: 12G
-#
-innodb_buffer_pool_size=2G
+#   2GB:  1G
+#   4GB:  3G
+#   8GB:  6G
+#   16GB: 12G
 
-# Dividir buffer pool em instâncias para paralelismo
-# innodb_buffer_pool_instances - Número de instâncias do Buffer Pool (melhora o paralelismo)
-#
-# PHP + MySQL juntos:
-#   2GB RAM: 1
-#   4GB RAM: 1
-#   8GB RAM: 2
-#   16GB RAM: 4
-#
+# 🔄 Divide o buffer pool do InnoDB em instâncias menores, aumentando o paralelismo em servidores com mais RAM
+# Ideal para workloads com múltiplas conexões simultâneas em leitura (como WordPress com picos de acesso)
+# 📌 Fórmula prática: 1 instância para cada ~1GB do innodb_buffer_pool_size
+# (Evite usar se o buffer pool for menor que 1GB — cada instância deve ter pelo menos ~1GB)
+innodb_buffer_pool_instances = 2
+
+# Perfis recomendados:
+# PHP + MySQL:
+#   2GB:  1
+#   4GB:  2   ← em uso
+#   8GB:  4
+#   16GB: 8
 # Apenas MySQL:
-#   2GB RAM: 1
-#   4GB RAM: 1
-#   8GB RAM: 3
-#   16GB RAM: 6
-#
-innodb_buffer_pool_instances=1
+#   2GB:  1
+#   4GB:  3
+#   8GB:  6
+#   16GB: 10
 
-# Otimiza leituras do InnoDB, reduzindo uso de disco
-# Quantidade de páginas verificadas por vez pelo InnoDB para limpeza de cache.
-innodb_lru_scan_depth=256
+# Controla quantas páginas o InnoDB verifica por vez para limpeza de cache (LRU)
+# Afeta a eficiência da liberação de memória quando o buffer pool está cheio
+innodb_lru_scan_depth = 256
 
-# Força escrita direta em disco
-# Método de flush dos dados no disco, O_DIRECT evita cache duplo entre OS e MySQL.
-innodb_flush_method=O_DIRECT
+# Define o método de escrita no disco para evitar cache duplicado (SO + MySQL)
+# O_DIRECT economiza RAM e melhora consistência de escrita
+innodb_flush_method = O_DIRECT
 
-# Desabilita escrita dupla do InnoDB
-# Protege contra corrupção de dados durante falhas de energia. Desativar acelera, mas aumenta risco.
-innodb_doublewrite=0
+# 🔧 Ajustes avançados de performance — use com atenção
 
-# Configurações de consistência de transações
-# Define suporte a transações XA distribuídas. Desativar melhora desempenho se não utilizado.
-innodb_support_xa=0
-# Verificação de integridade dos dados InnoDB. Desativar melhora desempenho mas aumenta risco.
-innodb_checksums=0
+# Desativa a escrita dupla do InnoDB (aumenta performance, mas reduz segurança em falhas de energia)
+innodb_doublewrite = 0
 
-# Cache de threads para conexões
-# thread_cache_size - Número de threads mantidas em cache para reutilização em novas conexões
-# 
-#   2GB RAM: 4
-#   4GB RAM: 8
-#   8GB RAM: 16
-#   16GB RAM: 32
-#
-thread_cache_size=8
+# Desativa suporte a transações XA distribuídas (melhora desempenho se não usado)
+innodb_support_xa = 0
 
-# Define modo SQL
-# Define regras SQL como restrições de integridade e sintaxe.
-sql_mode=""
+# Desativa verificação de integridade das páginas InnoDB (melhora desempenho, mas aumenta risco de corrupção silenciosa)
+innodb_checksums = 0
 
-# Logs para diagnosticar queries lentas
-# (Descomentar se quiser investigar performance)
-#
-#slow_query_log=1
-#slow_query_log_file=/var/log/mysql/slow-queries.log
-#long_query_time=2
+# 🔄 Cache de threads reutilizáveis para conexões
+# Reduz o custo de criação e destruição de threads em conexões simultâneas
+# Melhora o desempenho durante picos de tráfego com múltiplos acessos simultâneos
 
-# Fim das configurações personalizadas
+# 📌 Fórmula base recomendada (Releem):
+# thread_cache_size = valor-base + (max_connections / 100)
+# Obs: o valor-base foi ajustado aqui conforme a RAM do servidor para refletir melhor o uso real em ambientes WordPress
+
+# Divide o buffer pool do InnoDB em instâncias menores, aumentando o paralelismo em servidores com mais RAM
+# Ideal para workloads com múltiplas conexões simultâneas em leitura
+innodb_buffer_pool_instances = 6
+
+# Perfis recomendados:
+#   2GB (max_connections = 100):  4 + (100 / 100) = 5  → 5
+#   4GB (max_connections = 150):  4 + (150 / 100) = 5.5  → 6 ← em uso
+#   8GB (max_connections = 200):  4 + (200 / 100) = 6 → 7
+#   16GB (max_connections = 300): 4 + (300 / 100) = 7 → 8
+
+# ⚙️ Define o modo SQL (regras de sintaxe e integridade)
+# sql_mode vazio é mais permissivo — útil para compatibilidade com aplicações legadas como WordPress
+sql_mode = ""
+
+# 🐢 Log de queries lentas (ativar para diagnosticar gargalos de performance)
+#slow_query_log       = 1
+#slow_query_log_file  = /var/log/mysql/slow-queries.log
+#long_query_time      = 2
+
+# ✅ Fim das configurações personalizadas
