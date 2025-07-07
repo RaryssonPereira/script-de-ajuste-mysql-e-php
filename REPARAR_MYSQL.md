@@ -42,44 +42,44 @@ Se os logs indicarem problemas com arquivos ou tabelas, prossiga com os passos d
 
 ---
 
-## 2. Método 1: Reparo Rápido com mysqlcheck
+## 2. Reparo Rápido com mysqlcheck
 
 Este é o primeiro método a ser tentado, pois é mais seguro e menos invasivo.
 
-### Passo 2.1: Coletar a Senha do MySQL
+### Coletar a Senha do MySQL
 ```bash
 history | grep mysql
 ```
 
-### Passo 2.2: Verificar e Reparar Tabelas
+### Verificar e Reparar Tabelas
 ```bash
 # Substitua SUA_SENHA pela senha encontrada
 mysqlcheck -u root -pSUA_SENHA --auto-repair --check --all-databases
 ```
 
-### Passo 2.3: Verificação Final
+### Verificação Final
 
 Após o reparo, rode o comando novamente para garantir que os erros foram corrigidos.
 ```bash
 mysqlcheck -u root -pSUA_SENHA --check --all-databases
 ```
 
-## 3. Método 2: Recuperação Forçada (Se o Reparo Rápido Falhar)
+## 3. Recuperação Forçada (Se o Reparo Rápido Falhar)
 
 Atenção: Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup.
 
-### Passo 3.1: Parar o serviço do banco
+### Parar o serviço do banco
 ```bash
 service mysql stop
 ```
 
-### Passo 3.2: Realizar uma cópia física de segurança
+### Realizar uma cópia física de segurança
 ```bash
 # Substitua dia_mes_ano pela data atual
 cp -r -p /var/lib/mysql /var/lib/mysql_corrompido_dia_mes_ano
 ```
 
-### Passo 3.3: Colocar o MySQL em modo de recuperação
+### Colocar o MySQL em modo de recuperação
 
 Adicione a linha a seguir no arquivo de configuração, geralmente em `/etc/mysql/conf.d/mysql.cnf` ou `/etc/my.cnf`:
 ```bash
@@ -97,7 +97,7 @@ innodb_force_recovery=1
 service mysql start
 ```
 
-### Passo 3.5: Realizar um backup lógico (dump)
+### Realizar um backup lógico (dump)
 
 Com o banco em modo de recuperação, extraia os dados para um arquivo SQL.
 ```bash
@@ -105,13 +105,13 @@ Com o banco em modo de recuperação, extraia os dados para um arquivo SQL.
 mysqldump -u USER -pPASSWORD DATABASE > /caminho/backup_db.sql
 ```
 
-### Passo 3.6: Parar o serviço e desativar o modo de recuperação
+### Parar o serviço e desativar o modo de recuperação
 ```bash
 service mysql stop
 ```
 Agora, remova ou comente a linha innodb_force_recovery=1 do arquivo de configuração.
 
-### Passo 3.7: Iniciar o serviço e recriar o banco
+### Iniciar o serviço e recriar o banco
 ```bash
 service mysql start
 ```
@@ -125,7 +125,7 @@ DROP DATABASE nome_do_banco;
 CREATE DATABASE nome_do_banco;
 ```
 
-### Passo 3.8: Importar o backup
+### Importar o backup
 
 Finalmente, importe os dados do arquivo de dump que você criou.
 ```bash
