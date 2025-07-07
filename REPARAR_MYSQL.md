@@ -24,17 +24,17 @@ Antes de assumir que o banco de dados está corrompido, é fundamental verificar
 
 - Para ver os logs em tempo real (ideal para diagnosticar o erro no momento em que ele ocorre):
 ```bash
-tail -f /var/log/mysql/error.log
+sudo tail -f /var/log/mysql/error.log
 ```
 
 - Para buscar por erros específicos (ex: 'access denied'):
 ```bash
-grep -i 'access denied' /var/log/mysql/error.log
+sudo grep -i 'access denied' /var/log/mysql/error.log
 ```
 
 - Para navegar pelo arquivo de log completo com mais facilidade:
 ```bash
-less /var/log/mysql/error.log
+sudo less /var/log/mysql/error.log
 ```
 > ⚠️ Obs: O caminho do log pode variar. Em sistemas como CentOS, pode ser `/var/log/mysqld.log`. Em sistemas mais modernos, você também pode usar `journalctl -u mysql.service`.
 
@@ -68,17 +68,19 @@ mysqlcheck -u root -pSUA_SENHA --check --all-databases
 
 ## 3. 🛠️ Recuperação Forçada (Se o Reparo Rápido Falhar)
 
-**Atenção**: Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup.
+Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup. 
+
+> **Atenção**: A maioria dos comandos a seguir precisa de privilégios de superusuário. Use `sudo` no início dos comandos.
 
 ### Parar o serviço do banco
 ```bash
-service mysql stop
+sudo service mysql stop
 ```
 
 ### Realizar uma cópia física de segurança
 ```bash
 # Substitua dia_mes_ano pela data atual
-cp -r -p /var/lib/mysql /var/lib/mysql_corrompido_dia_mes_ano
+sudo cp -r -p /var/lib/mysql /var/lib/mysql_corrompido_dia_mes_ano
 ```
 
 ### Colocar o MySQL em modo de recuperação
@@ -94,7 +96,7 @@ innodb_force_recovery=1
 
 ### Iniciar o serviço do banco
 ```bash
-service mysql start
+sudo service mysql start
 ```
 
 ### Realizar um backup lógico (dump)
@@ -107,22 +109,24 @@ mysqldump -u USER -pPASSWORD DATABASE > /caminho/backup_db.sql
 
 ### Parar o serviço e desativar o modo de recuperação
 ```bash
-service mysql stop
+sudo service mysql stop
 ```
 Agora, remova ou comente a linha innodb_force_recovery=1 do arquivo de configuração.
 
 ### Iniciar o serviço e recriar o banco
 ```bash
-service mysql start
+sudo service mysql start
 ```
 
 ### Acesse o MySQL e recrie o banco de dados.
-```bash
+```sql
 -- Dropar o banco de dados corrompido
 DROP DATABASE nome_do_banco;
 
 -- Criar o banco de dados novamente
 CREATE DATABASE nome_do_banco;
+
+EXIT;
 ```
 
 ### Importar o backup
