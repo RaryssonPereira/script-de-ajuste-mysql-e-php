@@ -148,8 +148,7 @@ sudo mysql -u root -pSUA_SENHA nome_do_banco < /caminho/backup_db.sql
 
 Após a importação, seu banco de dados deve estar recuperado e funcionando normalmente.
 
-
-
+---
 
 ## 4. ☢️ Reinstalação Completa (Último Recurso)
 
@@ -160,19 +159,41 @@ Este procedimento é extremamente destrutivo e deve ser usado apenas se os méto
 ### Verificar o pacote MySQL instalado
 
 Este comando ajuda a identificar o nome exato do pacote para a desinstalação.
+
+- Em sistemas Debian/Ubuntu:
 ```bash
 dpkg -l | grep mysql
 ```
 
+- Em sistemas CentOS/RHEL:
+```bash
+rpm -qa | grep mysql
+```
+
 ### Desinstalar completamente o MySQL
 
+- Em sistemas Debian/Ubuntu:
+
 O comando purge remove os pacotes, arquivos de configuração e dados.
+  
 ```bash
 # Substitua <nome_do_pacote> pelo nome identificado no passo anterior
 sudo apt-get purge --auto-remove <nome_do_pacote>
 
 # Exemplo comum:
 sudo apt-get purge --auto-remove percona-server-common-5.7
+```
+
+- Em sistemas CentOS/RHEL:
+```bash
+# Substitua <nome_do_pacote> pelo nome identificado no passo anterior
+sudo yum remove <nome_do_pacote>
+
+# Ou em sistemas mais novos com DNF
+sudo dnf remove <nome_do_pacote>
+
+# Exemplo comum:
+sudo dnf remove percona-server-common-5.7
 ```
 
 ### Instalar o MySQL novamente
