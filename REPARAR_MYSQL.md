@@ -56,6 +56,7 @@ history | grep mysql
 # Substitua SUA_SENHA pela senha encontrada
 sudo mysqlcheck -u root -pSUA_SENHA --auto-repair --check --all-databases
 ```
+> 🔐 **Segurança**: Colocar a senha diretamente no comando é um risco, pois ela fica salva no histórico do terminal. Após a execução, considere limpar o histórico com o comando `history -c` ou use apenas `-p` e digite/cole a senha quando for solicitado. 
 
 ### Verificação Final
 
@@ -104,8 +105,9 @@ sudo service mysql start
 Com o banco em modo de recuperação, extraia os dados para um arquivo SQL.
 ```bash
 # Substitua os placeholders pelos valores corretos
-mysqldump -u USER -pPASSWORD DATABASE > /caminho/backup_db.sql
+mysqldump -u root -pSUA_SENHA DATABASE > /caminho/backup_db.sql
 ```
+> 🔐 **Segurança**: Colocar a senha diretamente no comando é um risco, pois ela fica salva no histórico do terminal. Após a execução, considere limpar o histórico com o comando `history -c` ou use apenas `-p` e digite/cole a senha quando for solicitado. 
 
 ### Parar o serviço e desativar o modo de recuperação
 ```bash
@@ -118,7 +120,13 @@ Agora, remova ou comente a linha innodb_force_recovery=1 do arquivo de configura
 sudo service mysql start
 ```
 
-### Acesse o MySQL e recrie o banco de dados.
+### Acesse o MySQL e recrie o banco de dados
+
+Acesse o MySQL com o seguinte comando:
+```bash
+sudo mysql -u root -pSUA_SENHA
+```
+
 ```sql
 -- Dropar o banco de dados corrompido
 DROP DATABASE nome_do_banco;
@@ -126,6 +134,7 @@ DROP DATABASE nome_do_banco;
 -- Criar o banco de dados novamente
 CREATE DATABASE nome_do_banco;
 
+-- Encerra a sessão do MySQL. O atalho Ctrl + D tem o mesmo efeito.
 EXIT;
 ```
 
@@ -133,7 +142,7 @@ EXIT;
 
 Finalmente, importe os dados do arquivo de dump que você criou.
 ```bash
-mysql -u username -p nome_do_banco < /caminho/backup_db.sql
+sudo mysql -u root -pSUA_SENHA nome_do_banco < /caminho/backup_db.sql
 ```
 
 Após a importação, seu banco de dados deve estar recuperado e funcionando normalmente.
