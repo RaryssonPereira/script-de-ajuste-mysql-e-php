@@ -147,3 +147,78 @@ sudo mysql -u root -pSUA_SENHA nome_do_banco < /caminho/backup_db.sql
 > 🔐 **Segurança**: Colocar a senha diretamente no comando é um risco, pois ela fica salva no histórico do terminal. Após a execução, considere limpar o histórico com o comando `history -c` ou use apenas `-p` e digite/cole a senha quando for solicitado.
 
 Após a importação, seu banco de dados deve estar recuperado e funcionando normalmente.
+
+
+
+
+## 4. ☢️ Reinstalação Completa (Último Recurso)
+
+Este procedimento é extremamente destrutivo e deve ser usado apenas se os métodos anteriores falharem, especialmente se houver suspeita de corrupção nas bases de dados nativas do próprio MySQL.
+
+> ⚠️ **Importante**: Garanta que você possui um backup lógico (arquivo .sql) do seu banco de dados, como o realizado no passo 3, antes de prosseguir.
+
+### Verificar o pacote MySQL instalado
+
+Este comando ajuda a identificar o nome exato do pacote para a desinstalação.
+```bash
+dpkg -l | grep mysql
+```
+
+### Desinstalar completamente o MySQL
+
+O comando purge remove os pacotes, arquivos de configuração e dados.
+```bash
+# Substitua <nome_do_pacote> pelo nome identificado no passo anterior
+sudo apt-get purge --auto-remove <nome_do_pacote>
+
+# Exemplo comum:
+sudo apt-get purge --auto-remove percona-server-common-5.7
+```
+
+### Instalar o MySQL novamente
+
+Os comandos a seguir instalam o Percona Server 5.7, um substituto comum para o MySQL.
+```bash
+sudo wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+sudo apt-get update -qq
+percona-release setup ps57
+# Pré-configura a senha do root para evitar prompts interativos
+echo "percona-server-server-5.7 percona-server-server-5.7/root-pass password ahq.iuo_8h43r" | sudo debconf-set-selections
+echo "percona-server-server-5.7 percona-server-server-5.7/re-root-pass password ahq.iuo_8h43r" | sudo debconf-set-selections
+# Instala o servidor
+sudo apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" percona-server-server-5.7
+```
+
+### Configurar o mysql.cnf
+
+Ajuste o arquivo `/etc/mysql/conf.d/mysql.cnf` com as configurações otimizadas. Você pode usar o padrão da sua organização ou um modelo de referência.
+
+Referência Serverdo: https://bitbucket.org/serverdoin/scriptbase/src/master/mysql.cnf
+
+### Reiniciar o serviço
+```bash
+sudo service mysql restart
+```
+
+### Criar a base de dados e importar o backup
+
+Acesse o MySQL com a nova senha e recrie o banco de dados antes de importar os dados.
+
+### Use a senha definida durante a instalação
+```bash
+sudo mysql -u root -pSUA_SENHA
+```
+
+### Dentro do MySQL:
+```sql
+CREATE DATABASE nome_do_banco;
+EXIT;
+```
+
+### Finalmente, importe o backup:
+```bash
+sudo mysql -u root -pSUA_SENHA nome_do_banco < /caminho/backup_db.sql
+```
+
+Seu ambiente MySQL estará completamente novo e com os dados restaurados.
