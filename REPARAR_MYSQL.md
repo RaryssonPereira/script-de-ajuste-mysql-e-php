@@ -8,7 +8,7 @@ Analista de Desenvolvimento de Sistemas e Infraestrutura | Brasileiro 🇧🇷
 
 ---
 
-**Vídeo de Referência**
+## ▶️ **Vídeo de Referência**
 
 Para um auxílio visual, o vídeo a seguir demonstra a resolução de problemas técnicos em um banco de dados MySQL, incluindo a depuração de problemas de corrupção e falhas de backup:
 
@@ -64,9 +64,11 @@ Após o reparo, rode o comando novamente para garantir que os erros foram corrig
 mysqlcheck -u root -pSUA_SENHA --check --all-databases
 ```
 
+---
+
 ## 3. 🛠️ Recuperação Forçada (Se o Reparo Rápido Falhar)
 
-Atenção: Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup.
+**Atenção**: Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup.
 
 ### Parar o serviço do banco
 ```bash
@@ -85,12 +87,10 @@ Adicione a linha a seguir no arquivo de configuração, geralmente em `/etc/mysq
 ```bash
 innodb_force_recovery=1
 ```
-
-**Importante**: Comece sempre com o valor 1. Se o serviço não iniciar, aumente o valor sequencialmente até 6.
-
 - **Níveis 1 a 3**: Permitem acesso aos dados sem risco de perdas.
-
 - **Níveis 4 a 6**: Permitem forçar o início do serviço, mas podem envolver perda de dados, pois algumas operações de escrita são desativadas.
+
+> ⚠️ **Importante**: Comece sempre com o valor 1. Se o serviço não iniciar, aumente o valor sequencialmente até 6.
 
 ### Iniciar o serviço do banco
 ```bash
@@ -116,7 +116,7 @@ Agora, remova ou comente a linha innodb_force_recovery=1 do arquivo de configura
 service mysql start
 ```
 
-Acesse o MySQL e recrie o banco de dados.
+### Acesse o MySQL e recrie o banco de dados.
 ```bash
 -- Dropar o banco de dados corrompido
 DROP DATABASE nome_do_banco;
