@@ -196,6 +196,16 @@ sudo dnf remove <nome_do_pacote>
 sudo dnf remove percona-server-common-5.7
 ```
 
+### Limpeza Manual (Opcional, mas recomendado)
+
+Após a desinstalação, verifique se os diretórios a seguir foram removidos. Se não, remova-os manualmente para garantir uma instalação limpa:
+
+```bash
+sudo rm -rf /etc/mysql
+sudo rm -rf /var/lib/mysql
+```
+> ⚠️ **CUIDADO**: Use os comandos acima apenas se tiver certeza absoluta e o backup dos seus dados estiver seguro. Esta ação não pode ser desfeita.
+
 ### Instalar o MySQL novamente
 
 Os comandos a seguir instalam o Percona Server 5.7, um substituto comum para o MySQL.
