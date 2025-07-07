@@ -208,7 +208,9 @@ sudo rm -rf /var/lib/mysql
 
 ### Instalar o MySQL novamente
 
-Os comandos a seguir instalam o Percona Server 5.7, um substituto comum para o MySQL.
+**Nota do Autor**: O guia a seguir demonstra a instalação do percona-server-server-5.7, que é a minha preferência. Se você utiliza outra versão do MySQL, MariaDB ou outro tipo de banco de dados, os passos de instalação serão diferentes e você precisará seguir a documentação específica do software escolhido, incluindo suas extensões, bibliotecas e outros serviços.
+
+Os comandos a seguir instalam o Percona Server 5.7 em sistemas baseados em Debian:
 ```bash
 sudo wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
 sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
