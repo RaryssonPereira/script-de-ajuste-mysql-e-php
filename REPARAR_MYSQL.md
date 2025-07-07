@@ -16,7 +16,7 @@ Link do vídeo: **indisponível**
 
 ---
 
-## 1. Diagnóstico Inicial
+## 1. 🧠 Diagnóstico Inicial
 
 Antes de assumir que o banco de dados está corrompido, é fundamental verificar se o problema não é mais simples, como um erro de autenticação.
 
@@ -42,7 +42,7 @@ Se os logs indicarem problemas com arquivos ou tabelas, prossiga com os passos d
 
 ---
 
-## 2. Reparo Rápido com mysqlcheck
+## 2. ⚙️ Reparo Rápido com mysqlcheck
 
 Este é o primeiro método a ser tentado, pois é mais seguro e menos invasivo.
 
@@ -64,7 +64,7 @@ Após o reparo, rode o comando novamente para garantir que os erros foram corrig
 mysqlcheck -u root -pSUA_SENHA --check --all-databases
 ```
 
-## 3. Recuperação Forçada (Se o Reparo Rápido Falhar)
+## 3. 🛠️ Recuperação Forçada (Se o Reparo Rápido Falhar)
 
 Atenção: Prossiga com este método apenas se o mysqlcheck não resolver o problema. Este processo é mais complexo e envolve a reinicialização do banco de dados a partir de um backup.
 
@@ -92,7 +92,7 @@ innodb_force_recovery=1
 
 - **Níveis 4 a 6**: Permitem forçar o início do serviço, mas podem envolver perda de dados, pois algumas operações de escrita são desativadas.
 
-### Passo 3.4: Iniciar o serviço do banco
+### Iniciar o serviço do banco
 ```bash
 service mysql start
 ```
