@@ -54,14 +54,14 @@ history | grep mysql
 ### Verificar e Reparar Tabelas
 ```bash
 # Substitua SUA_SENHA pela senha encontrada
-mysqlcheck -u root -pSUA_SENHA --auto-repair --check --all-databases
+sudo mysqlcheck -u root -pSUA_SENHA --auto-repair --check --all-databases
 ```
 
 ### Verificação Final
 
 Após o reparo, rode o comando novamente para garantir que os erros foram corrigidos.
 ```bash
-mysqlcheck -u root -pSUA_SENHA --check --all-databases
+sudo mysqlcheck -u root -pSUA_SENHA --check --all-databases
 ```
 
 ---
