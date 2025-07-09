@@ -208,26 +208,48 @@ sudo rm -rf /var/lib/mysql
 
 ### Instalar o MySQL novamente
 
-**Nota do Autor**: O guia a seguir demonstra a instalação do percona-server-server-5.7, que é a minha preferência. Se você utiliza outra versão do MySQL, MariaDB ou outro tipo de banco de dados, os passos de instalação serão diferentes e você precisará seguir a documentação específica do software escolhido, incluindo suas extensões, bibliotecas e outros serviços.
+Nota do Autor: Os guias de instalação abaixo são específicos para sistemas baseados em Debian/Ubuntu. Para CentOS/RHEL, consulte a documentação oficial em https://www.percona.com/ para obter as instruções corretas.
 
-Os comandos a seguir instalam o Percona Server 5.7 em sistemas baseados em Debian:
+**Opção A**: Instalar Percona Server 5.7 (Versão Legada)
 ```bash
 sudo wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
 sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
 sudo apt-get update -qq
 percona-release setup ps57
-# Pré-configura a senha do root para evitar prompts interativos
-echo "percona-server-server-5.7 percona-server-server-5.7/root-pass password ahq.iuo_8h43r" | sudo debconf-set-selections
-echo "percona-server-server-5.7 percona-server-server-5.7/re-root-pass password ahq.iuo_8h43r" | sudo debconf-set-selections
+
+# Para automatizar a instalação, substitua 'SUA_SENHA_AQUI' pela senha desejada e execute os comandos abaixo.
+# Se preferir definir a senha interativamente, comente ou remova as duas linhas seguintes.
+echo "percona-server-server-5.7 percona-server-server-5.7/root-pass password 'SUA_SENHA_AQUI'" | sudo debconf-set-selections
+echo "percona-server-server-5.7 percona-server-server-5.7/re-root-pass password 'SUA_SENHA_AQUI'" | sudo debconf-set-selections
+
 # Instala o servidor
 sudo apt-get install -qq -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" percona-server-server-5.7
+```
+> ⚠️ Aviso: Esta versão atingiu o Fim de Vida (EOL) em Outubro de 2023 e não recebe mais atualizações de segurança. Use por sua conta e risco, apenas se for estritamente necessário por questões de compatibilidade.
+
+**Opção B**: Instalar Percona Server 8.0 (Recomendado)
+
+Esta é a versão com suporte ativo e recomendada para novas instalações.
+```bash
+sudo wget https://repo.percona.com/apt/percona-release_latest.$(lsb_release -sc)_all.deb
+sudo dpkg -i percona-release_latest.$(lsb_release -sc)_all.deb
+sudo percona-release enable-only ps80 release
+sudo apt-get update
+
+# Para automatizar a instalação, substitua 'SUA_SENHA_AQUI' pela senha desejada e execute os comandos abaixo.
+# Se preferir definir a senha interativamente, comente ou remova as duas linhas seguintes.
+echo "percona-server-server percona-server-server/root_password password 'SUA_SENHA_AQUI'" | sudo debconf-set-selections
+echo "percona-server-server percona-server-server/root_password_again password 'SUA_SENHA_AQUI'" | sudo debconf-set-selections
+
+# Instala o servidor
+sudo apt-get install -y percona-server-server
 ```
 
 ### Configurar o mysql.cnf
 
 Ajuste o arquivo `/etc/mysql/conf.d/mysql.cnf` com as configurações otimizadas. Você pode usar o padrão da sua organização ou um modelo de referência.
 
-Referência Serverdo: https://bitbucket.org/serverdoin/scriptbase/src/master/mysql.cnf
+**Referência do Repositório**: https://github.com/RaryssonPereira/script-de-ajuste-mysql-e-php/blob/main/mysql.cnf
 
 ### Reiniciar o serviço
 ```bash
