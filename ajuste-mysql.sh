@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# Script: ajustemysql.sh
+# Script: ajuste-mysql.sh
 # Descricao: Ajusta automaticamente parametros de performance do MySQL com base na memoria RAM disponivel.
-# Autor: ServerDo.in (versao aprimorada)
+# Autor: Rarysson
 # Data: $(date +"%Y-%m-%d")
 
 CONFIG_FILE="/etc/mysql/conf.d/mysql.cnf"
